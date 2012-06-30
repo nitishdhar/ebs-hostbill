@@ -311,8 +311,6 @@ class Ebs extends PaymentModule {
                 'transaction_id' => $response['TransactionID']
             ));
             
-            session_start();
-            
             $this->addInfo($this->configuration['success_message']['value']);
             Utilities::redirect('?cmd=clientarea');
         }
