@@ -215,7 +215,7 @@ class Ebs extends PaymentModule {
         # Client Variables
         $name = $this->client['firstname'] . $this->client['lastname'];
         $email = $this->client['email'];
-        $address1 = $this->client['address2'];
+        $address1 = $this->client['address1'];
         $city = $this->client['city'];
         $state = $this->client['state'];
         $postcode = $this->client['postcode'];
