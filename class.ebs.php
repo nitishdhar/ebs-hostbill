@@ -295,12 +295,14 @@ class Ebs extends PaymentModule {
 
         if ($response['ResponseCode'] == 0) {
 
+           if($this->_transactionExists( $_POST['txn_id']) == false ) {        
+        
             $this->logActivity(array(
                 'output' => $response,
                 'result' => PaymentModule::PAYMENT_SUCCESS
             ));
-            
-            $response['Fee'] = round(($response['Amount']*.05), 2);  
+  
+            $response['Fee'] = round(($response['Amount'] * $this->configuration['tdr']['value']), 2);  
             
             $this->addTransaction(array(
                 'client_id' => $this->client['id'],
@@ -310,6 +312,8 @@ class Ebs extends PaymentModule {
                 'fee' => $response['Fee'],
                 'transaction_id' => $response['TransactionID']
             ));
+            
+            }
             
             $this->addInfo($this->configuration['success_message']['value']);
             Utilities::redirect('?cmd=clientarea');
