@@ -2,35 +2,21 @@
 /*
  * EBS Payment Gateway Integration Module for HostBill
  * Author - Nitish Dhar
- * Email - nitishdhar11@gmail.com
+ * Email - dhar.nitish@gmail.com
  *  
  * http://nitishdhar.com
  */
-class Ebs extends PaymentModule {
-    
-    /*
-     * const NAME
-     * Note: This needs to reflect class name - case sensitive.
-     */
-    const NAME = 'Ebs';
+class ebs extends PaymentModule {
 
-    /*
-     * const VER
-     * Insert your module version here
+     /**
+     * @var string Default module name to be displayed in adminarea
      */
-    const VER ='1.0';
-    
-    /*
-     * protected $modname
-     * AKA. "Nice name" - you can additionally add this variable - its contents will be displayed as module name after activation
+     protected $modname = 'EBS Hostbill';
+
+    /**
+     * @var string Default module name to be displayed in adminarea
      */
-    protected $modname = 'EBS Hostbill';
-    
-    /*
-     * protected $description
-     * If you want, you can add description to module, so its potential users will know what its for.
-     */
-    protected $description='EBS Payment Gateway Module.';
+    protected $description='EBS Payment Gateway';
 
     /*
      * protected $filename
@@ -38,9 +24,9 @@ class Ebs extends PaymentModule {
      */
     protected $filename='class.ebs.php';
     
-    /*
-     * protected $supportedCurrencies
-     * List of currencies supported by EBS.
+    /**
+     * List of currencies supported by gateway - if module supports all currencies - leave empty
+     * @var array
      */
     protected $supportedCurrencies = array('INR');
     
@@ -52,43 +38,43 @@ class Ebs extends PaymentModule {
         'account_id' =>array(
             'value'=>'',
             'type'=>'input'
-        ),
+            ),
         'secret_key'=>array(
             'value'=>'',
             'type'=>'input'
-        ),
+            ),
         'mode'=>array(
             'value'=>'TEST',
             'type'=>'input'
-        ),
+            ),
         'tdr'=>array(
             'value'=>'0.05',
             'type'=>'input'
-        ),
+            ),
         'success_message'=>array(
             'value'=>'Thank you! Transaction was successful! We have received you payment.',
             'type'=>'input'
-        ),
+            ),
         'failure_message'=>array(
-            'value'=>'Transaction Failed!',
+            'value'=>'Transaction Failed! Please try again or contact support for resolution.',
             'type'=>'input'
-        )
+            )
         
-    );
+        );
     
     //language array - each element key should start with module NAME
     protected $lang=array(
         'english'=>array(
-            'Ebsaccount_id'=>'Account ID',
-            'Ebssecret_key'=>'Secret Key',
-            'Ebsmode'=>'Mode',
-            'Ebstdr'=>'TDR - If TDR is 5%, provide value as 0.05',
-            'Ebssuccess_message'=>'Success Message',
-            'Ebsfailure_message'=>'Failure Message'
-        )
-    );
+            'ebsaccount_id'=>'Account ID',
+            'ebssecret_key'=>'Secret Key',
+            'ebsmode'=>'Mode',
+            'ebstdr'=>'TDR - If TDR is 5%, provide value as 0.05',
+            'ebssuccess_message'=>'Success Message',
+            'ebsfailure_message'=>'Failure Message'
+            )
+        );
     
-//CRYPT CLASS - Required by EBS Payment Gateway Integration
+    //CRYPT CLASS - Required by EBS Payment Gateway Integration
     /**
      * Real programmers...
      * @var array
@@ -136,7 +122,7 @@ class Ebs extends PaymentModule {
     /**
      * Assign encryption key to class
      *
-     * @param  string key	- Key which will be used for encryption
+     * @param  string key   - Key which will be used for encryption
      * @return void
      * @access public    
      */
@@ -159,7 +145,7 @@ class Ebs extends PaymentModule {
     /**
      * Encrypt function
      *
-     * @param  string paramstr 	- string that will encrypted
+     * @param  string paramstr  - string that will encrypted
      * @return void
      * @access public    
      */
@@ -185,7 +171,7 @@ class Ebs extends PaymentModule {
     /**
      * Decrypt function
      *
-     * @param  string paramstr 	- string that will decrypted
+     * @param  string paramstr  - string that will decrypted
      * @return void
      * @access public    
      */
@@ -231,79 +217,72 @@ class Ebs extends PaymentModule {
         # System Variables
         $companyname = 'EBS';
 
-        $code = '<form method="post" action="https://secure.ebs.in/pg/ma/sale/pay/" name="frmTransaction" id="frmTransaction" onSubmit="return validate()">
-<input type="hidden" name="account_id" value="' . $gatewayaccountid . '" />
-<input type="hidden" name="mode" value="' . $gatewaytestmode . '" />
-<input type="hidden" name="description" value="' . $description . '" />
-<input type="hidden" name="reference_no" value="' . $invoiceid . '" />
-<input type="hidden" name="name" value="' . $name . '" />
-<input type="hidden" name="address" value="' . $address1 . '" />
-<input type="hidden" name="city" value="' . $city . '" />
-<input type="hidden" name="state" value="' . $state . '" />
-<input type="hidden" name="country" value="' . $country . '" />
-<input type="hidden" name="postal_code" value="' . $postcode . '" />
-<input type="hidden" name="ship_name" value="' . $name . '" />
+        $code = 
+        '<form method="post" action="https://secure.ebs.in/pg/ma/sale/pay/" name="frmTransaction" id="frmTransaction" onSubmit="return validate()">
+        <input type="hidden" name="account_id" value="' . $gatewayaccountid . '" />
+        <input type="hidden" name="mode" value="' . $gatewaytestmode . '" />
+        <input type="hidden" name="description" value="' . $description . '" />
+        <input type="hidden" name="reference_no" value="' . $invoiceid . '" />
+        <input type="hidden" name="name" value="' . $name . '" />
+        <input type="hidden" name="address" value="' . $address1 . '" />
+        <input type="hidden" name="city" value="' . $city . '" />
+        <input type="hidden" name="state" value="' . $state . '" />
+        <input type="hidden" name="country" value="' . $country . '" />
+        <input type="hidden" name="postal_code" value="' . $postcode . '" />
+        <input type="hidden" name="ship_name" value="' . $name . '" />
+        <input type="hidden" name="ship_address" value="' . $address1 . '" />
+        <input type="hidden" name="ship_city" value="' . $city . '" />
+        <input type="hidden" name="ship_state" value="' . $state . '" />
+        <input type="hidden" name="ship_country" value="' . $country . '" />
+        <input type="hidden" name="ship_postal_code" value="' . $postcode . '" />
+        <input type="hidden" name="ship_phone" value="' . $phone . '" />
+        <input type="hidden" name="email" value="' . $email . '" />
+        <input type="hidden" name="phone" value="' . $phone . '" />
+        <input type="hidden" name="amount" value="' . $amount . '" />
+        <input type="hidden" name="return_url" value="' . $callBackUrl . '" />
+        <input type="hidden" name="secure_hash" value="' . $secure_hash . '"/>
+        <input type="submit" value="Pay Now" class="btn btn-success" />
+    </form>';
 
-<input type="hidden" name="ship_address" value="' . $address1 . '" />
-<input type="hidden" name="ship_city" value="' . $city . '" />
-<input type="hidden" name="ship_state" value="' . $state . '" />
-<input type="hidden" name="ship_country" value="' . $country . '" />
-<input type="hidden" name="ship_postal_code" value="' . $postcode . '" />
-<input type="hidden" name="ship_phone" value="' . $phone . '" />
-<input type="hidden" name="email" value="' . $email . '" />
-<input type="hidden" name="phone" value="' . $phone . '" />
-<input type="hidden" name="amount" value="' . $amount . '" />
-<input type="hidden" name="return_url" value="' . $callBackUrl . '" />
-<input type="hidden" name="secure_hash" value="' . $secure_hash . '"/>
-<input type="submit" value="Pay Now" class="btn btn-success" />
-</form>';
-
-        if ($autosubmit) {
-            $code .="<script language=\"javascript\">
-                setTimeout ( \"autoForward()\" , 5000 );
-                function autoForward() {
-                    document.forms.payform.submit()
-                }
-                </script>
-                ";
+    if ($autosubmit) {
+        $code .=
+        '<script language="javascript">
+        setTimeout (autoForward(), 5000);
+        function autoForward() {
+            document.forms.payform.submit();
         }
+    </script>';
+}
+return $code;
+}
 
-        return $code;
+public function callback() {
+
+    $secret_key = $this->configuration['secret_key']['value'];
+        // Check if DR value is received properly. Hosts sometimes limit charaters in GET request
+    if (isset($_GET['DR'])) {
+        $DR = preg_replace("/\s/", "+", $_GET['DR']);
+        $this->Crypt_RC4($secret_key);
+        $QueryString = base64_decode($DR);
+        $this->decrypt($QueryString);
+        $QueryString = explode('&', $QueryString);
+        foreach ($QueryString as $param) {
+            $param = split('=', $param);
+            $response[$param[0]] = urldecode($param[1]);
+        }
+    } else {
+        $this->addInfo($this->configuration['failure_message']['value']);
+        Utilities::redirect('clientarea');
     }
-
-    public function callback() {
-
-        //you will probably going to validate it here somehow - checksum, ip etc.
-
-        $secret_key = $this->configuration['secret_key']['value'];  // Your Secret Key
-
-        if (isset($_GET['DR'])) {
-
-            $DR = preg_replace("/\s/", "+", $_GET['DR']);
-
-            $this->Crypt_RC4($secret_key);
-            $QueryString = base64_decode($DR);
-            $this->decrypt($QueryString);
-            $QueryString = explode('&', $QueryString);
-
-            foreach ($QueryString as $param) {
-                $param = split('=', $param);
-                $response[$param[0]] = urldecode($param[1]);
-            }
-        }
-
-
-        if ($response['ResponseCode'] == 0) {
-
-           if($this->_transactionExists( $_POST['txn_id']) == false ) {        
-        
+        // Check if transaction was successful
+    if ($response['ResponseCode'] == 0) {
+        // Check if transaction does not already exists
+        if($this->_transactionExists($response['TransactionID']) == false) {        
             $this->logActivity(array(
                 'output' => $response,
                 'result' => PaymentModule::PAYMENT_SUCCESS
-            ));
-  
+                ));
             $response['Fee'] = round(($response['Amount'] * $this->configuration['tdr']['value']), 2);  
-            
             $this->addTransaction(array(
                 'client_id' => $this->client['id'],
                 'invoice_id' => $response['MerchantRefNo'],
@@ -311,25 +290,21 @@ class Ebs extends PaymentModule {
                 'in' => $response['Amount'],
                 'fee' => $response['Fee'],
                 'transaction_id' => $response['TransactionID']
-            ));
-            
-            }
-            
-            $this->addInfo($this->configuration['success_message']['value']);
-            Utilities::redirect('?cmd=clientarea');
+                ));
         }
-
-        if ($response['ResponseCode'] <> 0) {
-
-            $this->logActivity(array(
-                'output' => $response,
-                'result' => PaymentModule::PAYMENT_FAILURE
-            ));
-
-            $this->addInfo($this->configuration['failure_message']['value']);
-            Utilities::redirect('?cmd=clientarea');
-        }
+        $this->addInfo($this->configuration['success_message']['value']);
+        Utilities::redirect('clientarea');
     }
+    // If transaction failed
+    if ($response['ResponseCode'] <> 0) {
+        $this->logActivity(array(
+            'output' => $response,
+            'result' => PaymentModule::PAYMENT_FAILURE
+            ));
+        $this->addInfo($this->configuration['failure_message']['value']);
+        Utilities::redirect('clientarea');
+    }
+}
 
 }
 
